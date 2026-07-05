@@ -1,0 +1,15 @@
+project/
+├── app.py
+├── requirements.txt
+├── uploads/
+├── outputs/
+├── templates/
+│   └── index.html
+├── static/
+│   ├── css/
+│   │   └── style.css
+│   ├── js/
+│   │   └── script.js
+│   └── images/
+└── README.md
+

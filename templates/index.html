@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PDF to Word Converter | Convert PDF to DOCX Instantly</title>
+  <meta name="description" content="Upload your PDF and download an editable Word document (.docx) within seconds." />
+
+  <!-- Font Awesome (modern icons) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- Tailwind via CDN (local ready after build step; for simplicity local-run) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root {
+      --primary: #2563EB;
+      --secondary: #60A5FA;
+      --bg: #F8FAFC;
+    }
+  </style>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body class="bg-[var(--bg)] text-slate-900">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 border-b border-slate-200/70 bg-white/80 backdrop-blur">
+    <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3">
+        <div class="h-10 w-10 rounded-2xl bg-[var(--primary)] text-white flex items-center justify-center shadow-sm">
+          <i class="fa-solid fa-file-pdf text-lg"></i>
+        </div>
+        <div>
+          <div class="font-semibold leading-tight">PDF to Word</div>
+          <div class="text-xs text-slate-500 -mt-0.5">Converter</div>
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-7 text-sm">
+        <a href="#" class="hover:text-[var(--primary)]">Home</a>
+        <a href="#features" class="hover:text-[var(--primary)]">Features</a>
+        <a href="#about" class="hover:text-[var(--primary)]">About</a>
+        <a href="#contact" class="hover:text-[var(--primary)]">Contact</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <button id="themeToggle" class="btn-icon rounded-xl p-2 border border-slate-200 hover:border-slate-300 hover:bg-slate-50" aria-label="Toggle dark mode">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="mx-auto max-w-6xl px-4 py-10 md:py-14">
+      <div class="grid lg:grid-cols-2 gap-8 items-center">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-slate-200 shadow-sm">
+            <span class="h-2 w-2 rounded-full bg-[var(--secondary)]"></span>
+            <span class="text-xs text-slate-600">Fast • Accurate • Secure</span>
+          </div>
+          <h1 class="mt-5 text-4xl md:text-5xl font-bold tracking-tight leading-[1.1]">
+            Convert PDF to Word Instantly
+          </h1>
+          <p class="mt-4 text-slate-600 text-base md:text-lg">
+            Upload your PDF and download an editable Word document within seconds.
+          </p>
+
+          <div class="mt-6 flex flex-col sm:flex-row gap-3">
+            <label for="pdfInput" class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-[var(--primary)] text-white font-semibold shadow-sm hover:opacity-95 cursor-pointer transition-all transform hover:-translate-y-0.5">
+              <i class="fa-solid fa-upload"></i>
+              Select PDF
+            </label>
+            <a href="#upload" class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-white border border-slate-200 text-slate-800 font-semibold shadow-sm hover:bg-slate-50 transition-all">
+              <i class="fa-solid fa-hand-pointer"></i>
+              Drag & Drop Area
+            </a>
+          </div>
+
+          <div class="mt-7 grid sm:grid-cols-3 gap-3">
+            <div class="rounded-2xl bg-white border border-slate-200 p-4 shadow-sm">
+              <div class="text-[var(--primary)] font-semibold">100MB</div>
+              <div class="text-xs text-slate-500 mt-1">Max upload size</div>
+            </div>
+            <div class="rounded-2xl bg-white border border-slate-200 p-4 shadow-sm">
+              <div class="text-[var(--primary)] font-semibold">.docx</div>
+              <div class="text-xs text-slate-500 mt-1">Download editable</div>
+            </div>
+            <div class="rounded-2xl bg-white border border-slate-200 p-4 shadow-sm">
+              <div class="text-[var(--primary)] font-semibold">Server-side</div>
+              <div class="text-xs text-slate-500 mt-1">No 3rd-party APIs</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="upload">
+          <div class="card">
+            <div class="card-header">
+              <div class="flex items-center gap-3">
+                <div class="icon-pill">
+                  <i class="fa-regular fa-file-lines"></i>
+                </div>
+                <div>
+                  <div class="font-semibold">Upload your PDF</div>
+                  <div class="text-sm text-slate-500">Only PDF files, max 100MB.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4">
+              <input id="pdfInput" type="file" accept="application/pdf" class="hidden" />
+
+              <div id="dropZone" class="dropzone">
+                <div class="text-center">
+                  <div class="mx-auto h-14 w-14 rounded-2xl bg-[var(--secondary)]/15 text-[var(--secondary)] flex items-center justify-center">
+                    <i class="fa-solid fa-file-pdf text-2xl"></i>
+                  </div>
+                  <div class="mt-4 font-semibold">Drag & Drop your PDF</div>
+                  <div class="text-sm text-slate-600 mt-1">or click to select a file</div>
+                  <div class="text-xs text-slate-500 mt-3">Conversion runs on the server.</div>
+                </div>
+              </div>
+
+              <div id="fileCard" class="hidden mt-4 rounded-2xl bg-white border border-slate-200 p-4 shadow-sm">
+                <div class="flex items-start justify-between gap-4">
+                  <div class="flex items-start gap-3">
+                    <div class="h-10 w-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center">
+                      <i class="fa-solid fa-file-pdf"></i>
+                    </div>
+                    <div>
+                      <div id="fileName" class="font-semibold truncate max-w-[18rem]"></div>
+                      <div id="fileMeta" class="text-sm text-slate-500 mt-1"></div>
+                    </div>
+                  </div>
+                  <button id="removeFile" class="btn-danger">
+                    <i class="fa-solid fa-xmark"></i>
+                    <span class="hidden sm:inline">Remove</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Progress -->
+              <div id="progressCard" class="hidden mt-4 rounded-2xl bg-white border border-slate-200 p-4 shadow-sm">
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <div class="font-semibold">Conversion in progress</div>
+                    <div id="progressMessage" class="text-sm text-slate-600 mt-1">Uploading...</div>
+                    <div class="text-xs text-slate-500 mt-2">Estimated time: <span id="eta">--</span></div>
+                  </div>
+                  <div class="text-right">
+                    <div class="text-2xl font-bold text-[var(--primary)] tabular-nums" id="progressPct">0%</div>
+                    <div class="text-xs text-slate-500 mt-1" id="progressStatus">Queued</div>
+                  </div>
+                </div>
+
+                <div class="mt-4">
+                  <div class="h-3 w-full bg-slate-100 rounded-full overflow-hidden">
+                    <div id="progressBar" class="h-full w-0 bg-[var(--primary)] rounded-full transition-[width] duration-300"></div>
+                  </div>
+                </div>
+
+                <div class="mt-3 flex items-center gap-3 text-sm text-slate-600">
+                  <div id="loadingSpinner" class="spinner hidden"></div>
+                  <div id="loadingText">Please wait while we process your PDF...</div>
+                </div>
+              </div>
+
+              <!-- Result -->
+              <div id="resultCard" class="hidden mt-4 rounded-2xl bg-white border border-slate-200 p-4 shadow-sm">
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <div class="flex items-center gap-3">
+                      <div class="h-10 w-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                        <i class="fa-solid fa-circle-check"></i>
+                      </div>
+                      <div>
+                        <div class="font-semibold text-emerald-700">✔ Conversion Successful</div>
+                        <div id="resultSubtitle" class="text-sm text-slate-500 mt-1"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mt-4 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+                  <div class="text-sm text-slate-600">
+                    <div><span class="font-semibold">File:</span> <span id="resultFileName" class="font-medium"></span></div>
+                    <div class="mt-1"><span class="font-semibold">Pages:</span> <span id="resultPages"></span></div>
+                    <div class="mt-1"><span class="font-semibold">Converted on:</span> <span id="resultDate"></span></div>
+                  </div>
+
+                  <div class="flex flex-col sm:flex-row gap-2">
+                    <a id="downloadBtn" href="#" class="btn-primary justify-center">
+                      <i class="fa-solid fa-download"></i>
+                      <span>Download Word</span>
+                    </a>
+                    <button id="convertAnother" class="btn-secondary">
+                      <i class="fa-solid fa-rotate-left"></i>
+                      <span>Convert Another File</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Actions -->
+              <div class="mt-4 flex items-center justify-between gap-3">
+                <div class="text-xs text-slate-500">
+                  Supported: PDF only. Max 100MB.
+                </div>
+                <button id="convertBtn" disabled class="btn-primary disabled:opacity-50 disabled:cursor-not-allowed">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i>
+                  Convert to Word
+                </button>
+              </div>
+
+              <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="mx-auto max-w-6xl px-4 pb-10">
+      <h2 class="text-2xl md:text-3xl font-bold">Features</h2>
+      <p class="text-slate-600 mt-2">Premium conversion experience with a clean, responsive UI.</p>
+
+      <div class="mt-6 grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="feature">
+          <i class="fa-solid fa-cloud-arrow-up text-[var(--primary)]"></i>
+          <div class="font-semibold mt-2">Drag & Drop</div>
+          <div class="text-sm text-slate-600 mt-1">Drop your PDF instantly.</div>
+        </div>
+        <div class="feature">
+          <i class="fa-solid fa-sun text-[var(--primary)]"></i>
+          <div class="font-semibold mt-2">Dark & Light Mode</div>
+          <div class="text-sm text-slate-600 mt-1">Comfortable viewing anytime.</div>
+        </div>
+        <div class="feature">
+          <i class="fa-solid fa-chart-line text-[var(--primary)]"></i>
+          <div class="font-semibold mt-2">Progress Bar</div>
+          <div class="text-sm text-slate-600 mt-1">Live progress and messages.</div>
+        </div>
+        <div class="feature">
+          <i class="fa-solid fa-shield-halved text-[var(--primary)]"></i>
+          <div class="font-semibold mt-2">Error Handling</div>
+          <div class="text-sm text-slate-600 mt-1">Validation + clear feedback.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="mx-auto max-w-6xl px-4 pb-10">
+      <div class="card">
+        <div class="card-header">
+          <div class="flex items-center gap-3">
+            <div class="icon-pill">
+              <i class="fa-solid fa-circle-info"></i>
+            </div>
+            <div>
+              <div class="font-semibold">About this converter</div>
+              <div class="text-sm text-slate-500">Server-side conversion with Python (Flask + pdf2docx).</div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 text-slate-600 leading-relaxed">
+          <p>
+            Website ini mengonversi PDF menjadi dokumen Microsoft Word (.docx) langsung di server.
+            Tidak ada API pihak ketiga.
+          </p>
+          <p class="mt-3">
+            Untuk hasil maksimal, pastikan PDF Anda tidak terlalu dipindai ulang (scan), dan gunakan kualitas gambar yang baik.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="mx-auto max-w-6xl px-4 pb-16">
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="card">
+          <div class="card-header">
+            <div class="flex items-center gap-3">
+              <div class="icon-pill">
+                <i class="fa-solid fa-envelope"></i>
+              </div>
+              <div>
+                <div class="font-semibold">Contact</div>
+                <div class="text-sm text-slate-500">Sampaikan feedback atau kebutuhan Anda.</div>
+              </div>
+            </div>
+          </div>
+          <form id="contactForm" class="mt-4">
+            <div class="grid sm:grid-cols-2 gap-3">
+              <input type="text" name="name" placeholder="Your name" class="input" required />
+              <input type="email" name="email" placeholder="Email" class="input" required />
+            </div>
+            <textarea name="message" placeholder="Message" class="input mt-3 min-h-[110px]" required></textarea>
+            <button type="button" id="contactSend" class="btn-primary mt-3 w-full">
+              <i class="fa-solid fa-paper-plane"></i>
+              Send
+            </button>
+          </form>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="flex items-center gap-3">
+              <div class="icon-pill">
+                <i class="fa-solid fa-list-check"></i>
+              </div>
+              <div>
+                <div class="font-semibold">What you get</div>
+                <div class="text-sm text-slate-500">A clean conversion workflow.</div>
+              </div>
+            </div>
+          </div>
+          <ul class="mt-4 space-y-2 text-slate-600">
+            <li class="flex gap-3"><i class="fa-solid fa-check-circle text-emerald-600 mt-0.5"></i> Auto delete temporary files</li>
+            <li class="flex gap-3"><i class="fa-solid fa-check-circle text-emerald-600 mt-0.5"></i> PDF validation + size limit</li>
+            <li class="flex gap-3"><i class="fa-solid fa-check-circle text-emerald-600 mt-0.5"></i> Toast notifications & loading animation</li>
+            <li class="flex gap-3"><i class="fa-solid fa-check-circle text-emerald-600 mt-0.5"></i> Download DOCX after conversion</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200/70 bg-white">
+    <div class="mx-auto max-w-6xl px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="text-sm text-slate-600">© 2026 PDF to Word Converter</div>
+      <div class="flex items-center gap-4 text-sm">
+        <a href="#" class="hover:text-[var(--primary)]">Privacy Policy</a>
+        <a href="#" class="hover:text-[var(--primary)]">Terms of Service</a>
+        <a href="#contact" class="hover:text-[var(--primary)]">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Basic theme persistence
+    (function(){
+      const themeToggle = document.getElementById('themeToggle');
+      const root = document.documentElement;
+      const stored = localStorage.getItem('theme');
+      if(stored === 'dark'){
+        root.classList.add('dark');
+      }
+      function applyIcon(){
+        const icon = themeToggle.querySelector('i');
+        const isDark = root.classList.contains('dark');
+        icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+      }
+      applyIcon();
+      themeToggle?.addEventListener('click', ()=>{
+        root.classList.toggle('dark');
+        localStorage.setItem('theme', root.classList.contains('dark') ? 'dark' : 'light');
+        applyIcon();
+      });
+    })();
+  </script>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
+
